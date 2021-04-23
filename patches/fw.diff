@@ -1,0 +1,15 @@
+diff --git a/scripts/pluto.its b/scripts/pluto.its
+index e69e417..aa7fa08 100644
+--- a/scripts/pluto.its
++++ b/scripts/pluto.its
+@@ -156,8 +156,8 @@
+ 		};
+ 
+ 		config@9 { /* This one is actually RevB */
+-			description = "Linux with fpga RevB";
+-			fdt = "fdt@2";
++			description = "Linux with fpga RevC";
++			fdt = "fdt@3";
+ 			kernel = "linux_kernel@1";
+ 			ramdisk = "ramdisk@1";
+ 			fpga = "fpga@1";
