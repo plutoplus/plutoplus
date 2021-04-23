@@ -19,7 +19,11 @@ The repo maintain the firmware of Pluto+. Pluto+ is a software-defined radio pla
 
 ![Front](./images/clip_image002.jpg)
 
-![Back](./images/clip_image003)
+![Back](./images/clip_image003.jpg)
+
+### Schematics
+
+Pluto+ has full schematics open sourced. You can find this in sch folder.
 
 ## How to upgrade the firmware
 
