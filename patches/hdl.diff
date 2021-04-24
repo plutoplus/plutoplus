@@ -1,8 +1,8 @@
 diff --git a/projects/pluto/system_bd.tcl b/projects/pluto/system_bd.tcl
-index 8a9634b9a..72644e176 100644
+index 8a9634b9..85c1bc28 100644
 --- a/projects/pluto/system_bd.tcl
 +++ b/projects/pluto/system_bd.tcl
-@@ -47,6 +47,11 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 100.0
+@@ -47,6 +47,12 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 100.0
  ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA1_PERIPHERAL_FREQMHZ 200.0
  ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_ENABLE 1
  ad_ip_parameter sys_ps7 CONFIG.PCW_GPIO_EMIO_GPIO_IO 17
@@ -11,10 +11,11 @@ index 8a9634b9a..72644e176 100644
 +ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_ENET0_IO {MIO 16 .. 27}
 +ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_GRP_MDIO_ENABLE 1
 +ad_ip_parameter sys_ps7 CONFIG.PCW_ENET0_GRP_MDIO_IO {MIO 52 .. 53}
++
  ad_ip_parameter sys_ps7 CONFIG.PCW_SPI1_PERIPHERAL_ENABLE 0
  ad_ip_parameter sys_ps7 CONFIG.PCW_I2C0_PERIPHERAL_ENABLE 0
  ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_PERIPHERAL_ENABLE 1
-@@ -54,16 +59,25 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_UART1_IO {MIO 12 .. 13}
+@@ -54,16 +60,28 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_UART1_UART1_IO {MIO 12 .. 13}
  ad_ip_parameter sys_ps7 CONFIG.PCW_I2C1_PERIPHERAL_ENABLE 0
  ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_PERIPHERAL_ENABLE 1
  ad_ip_parameter sys_ps7 CONFIG.PCW_QSPI_GRP_SINGLE_SS_ENABLE 1
@@ -26,8 +27,10 @@ index 8a9634b9a..72644e176 100644
 +ad_ip_parameter sys_ps7 CONFIG.PCW_SD0_SD0_IO "MIO 40 .. 45"
 +ad_ip_parameter sys_ps7 CONFIG.PCW_SD0_GRP_CD_ENABLE 1
 +ad_ip_parameter sys_ps7 CONFIG.PCW_SD0_GRP_CD_IO "MIO 47"
-+ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_47_PULLUP {disabled}
++ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_47_PULLUP {enabled}
 +ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_47_SLEW {slow}
++ad_ip_parameter sys_ps7 CONFIG.PCW_SD0_GRP_POW_ENABLE    0
++ad_ip_parameter sys_ps7 CONFIG.PCW_SD0_GRP_WP_ENABLE     0
 +
  ad_ip_parameter sys_ps7 CONFIG.PCW_TTC0_PERIPHERAL_ENABLE 0
  ad_ip_parameter sys_ps7 CONFIG.PCW_USE_FABRIC_INTERRUPT 1
@@ -38,12 +41,13 @@ index 8a9634b9a..72644e176 100644
 +ad_ip_parameter sys_ps7 CONFIG.PCW_USB0_RESET_IO {MIO 46}
  ad_ip_parameter sys_ps7 CONFIG.PCW_USB0_RESET_ENABLE 1
 +ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_46_SLEW {slow}
++ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_46_PULLUP {enabled}
 +
  ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_INTR 1
  ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_MODE REVERSE
  ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_0_PULLUP {enabled}
 diff --git a/projects/pluto/system_constr.xdc b/projects/pluto/system_constr.xdc
-index 67a9558cf..9bf4e924f 100644
+index 67a9558c..9bf4e924 100644
 --- a/projects/pluto/system_constr.xdc
 +++ b/projects/pluto/system_constr.xdc
 @@ -1,69 +1,69 @@
@@ -382,7 +386,7 @@ index 67a9558cf..9bf4e924f 100644
  set_property SLEW FAST [get_ports *ddr_dqs*]
  set_property PACKAGE_PIN C2 [get_ports ddr_dqs_p[0]]
 diff --git a/projects/pluto/system_project.tcl b/projects/pluto/system_project.tcl
-index 89d81a448..fec220a11 100644
+index 89d81a44..fec220a1 100644
 --- a/projects/pluto/system_project.tcl
 +++ b/projects/pluto/system_project.tcl
 @@ -3,7 +3,7 @@ source ../scripts/adi_env.tcl

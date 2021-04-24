@@ -1,5 +1,5 @@
 diff --git a/arch/arm/boot/dts/zynq-pluto-sdr-revc.dts b/arch/arm/boot/dts/zynq-pluto-sdr-revc.dts
-index 7aff4e197d0f..6eadb4e519d9 100644
+index 7aff4e197d0f..5313336a30a4 100644
 --- a/arch/arm/boot/dts/zynq-pluto-sdr-revc.dts
 +++ b/arch/arm/boot/dts/zynq-pluto-sdr-revc.dts
 @@ -17,46 +17,6 @@
@@ -61,7 +61,7 @@ index 7aff4e197d0f..6eadb4e519d9 100644
  	leds {
  		compatible = "gpio-leds";
  		led0 {
-@@ -92,3 +57,81 @@
+@@ -92,3 +57,18 @@
  		};
  	};
  };
@@ -80,74 +80,12 @@ index 7aff4e197d0f..6eadb4e519d9 100644
 +    pinctrl-names = "default";
 +    pinctrl-0 = <&pinctrl_usb0_default>;
 +};
-+
-+&pinctrl0 {
-+	pinctrl_gem0_default: gem0-default {
-+		mux {
-+			function = "ethernet0";
-+			groups = "ethernet0_0_grp";
-+		};
-+
-+		conf {
-+			groups = "ethernet0_0_grp";
-+			slew-rate = <0>;
-+			io-standard = <1>;
-+		};
-+
-+		conf-rx {
-+			pins = "MIO22", "MIO23", "MIO24", "MIO25", "MIO26", "MIO27";
-+			bias-high-impedance;
-+			low-power-disable;
-+		};
-+
-+		conf-tx {
-+			pins = "MIO16", "MIO17", "MIO18", "MIO19", "MIO20", "MIO21";
-+			low-power-enable;
-+			bias-disable;
-+		};
-+
-+		mux-mdio {
-+			function = "mdio0";
-+			groups = "mdio0_0_grp";
-+		};
-+
-+		conf-mdio {
-+			groups = "mdio0_0_grp";
-+			slew-rate = <0>;
-+			io-standard = <1>;
-+			bias-disable;
-+		};
-+	};
-+
-+    pinctrl_usb0_default: usb0-default {
-+        mux {
-+                groups = "usb0_0_grp";
-+                function = "usb0";
-+        };
-+
-+            conf {
-+                groups = "usb0_0_grp";
-+                slew-rate = <0>;
-+                io-standard = <1>;
-+        };
-+
-+        conf-rx {
-+                pins = "MIO29", "MIO31", "MIO36";
-+                bias-high-impedance;
-+        };
-+
-+        conf-tx {
-+                pins = "MIO28", "MIO30", "MIO32", "MIO33", "MIO34",
-+                        "MIO35", "MIO37", "MIO38", "MIO39";
-+                bias-disable;
-+        };
-+    };
-+};
+\ No newline at end of file
 diff --git a/arch/arm/boot/dts/zynq-pluto-sdr.dtsi b/arch/arm/boot/dts/zynq-pluto-sdr.dtsi
-index 6cd0e41e5411..7759d862be1e 100644
+index e936f48dbd73..bad6c46056a5 100644
 --- a/arch/arm/boot/dts/zynq-pluto-sdr.dtsi
 +++ b/arch/arm/boot/dts/zynq-pluto-sdr.dtsi
-@@ -40,8 +40,17 @@
+@@ -40,8 +40,16 @@
  
  };
  
@@ -161,20 +99,13 @@ index 6cd0e41e5411..7759d862be1e 100644
  &sdhci0 {
 -	status = "disabled";
 +	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sdhci0_default>;
++    disable-wp;
  };
  
  &watchdog0 {
-@@ -49,13 +58,35 @@
- 	reset-on-timeout;
+@@ -50,12 +58,29 @@
  };
  
-+&gpio0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_gpio0_default>;
-+};
-+
  &usb0 {
 -	xlnx,phy-reset-gpio = <&gpio0 52 0>;
 +	xlnx,phy-reset-gpio = <&gpio0 46 0>;
@@ -203,7 +134,7 @@ index 6cd0e41e5411..7759d862be1e 100644
  &qspi {
  	status = "okay";
  	is-dual = <0>;
-@@ -97,6 +128,18 @@
+@@ -98,6 +123,18 @@
  	};
  };
  
@@ -222,7 +153,7 @@ index 6cd0e41e5411..7759d862be1e 100644
  / {
  	fpga_axi: fpga-axi@0 {
  		compatible = "simple-bus";
-@@ -186,6 +229,146 @@
+@@ -187,6 +224,148 @@
  	};
  };
  
@@ -279,9 +210,11 @@ index 6cd0e41e5411..7759d862be1e 100644
 +		conf-rx {
 +			pins = "MIO29", "MIO31", "MIO36";
 +			bias-high-impedance;
-+			slew-rate = <0>;
-+			io-standard = <1>;
-+			bias-disable;
++		};
++
++		conf-pull-up {
++			pins = "MIO46";
++			bias-pull-up;
 +		};
 +
 +		conf-tx {
@@ -309,7 +242,7 @@ index 6cd0e41e5411..7759d862be1e 100644
 +		};
 +
 +		conf-pull-none {
-+			pins = "MIO7", "MIO11", "MIO46";
++			pins = "MIO7", "MIO11";
 +			bias-disable;
 +		};
 +	};
@@ -370,7 +303,7 @@ index 6cd0e41e5411..7759d862be1e 100644
  	status = "okay";
  
 diff --git a/arch/arm/configs/zynq_pluto_defconfig b/arch/arm/configs/zynq_pluto_defconfig
-index e00b680e8baa..7bd885f59489 100644
+index ca72dd96a29d..01ed0ddd753d 100644
 --- a/arch/arm/configs/zynq_pluto_defconfig
 +++ b/arch/arm/configs/zynq_pluto_defconfig
 @@ -270,3 +270,15 @@ CONFIG_RCU_CPU_STALL_TIMEOUT=60
@@ -389,31 +322,3 @@ index e00b680e8baa..7bd885f59489 100644
 +CONFIG_MMC_SDHCI=y
 +CONFIG_MMC_SDHCI_PLTFM=y
 +CONFIG_MMC_SDHCI_OF_ARASAN=y
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 3b87b2e4486d..0d4602c59b75 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -1983,15 +1983,17 @@ static netdev_tx_t macb_start_xmit(struct sk_buff *skb, struct net_device *dev)
- 		goto unlock;
- 	}
- 
--	/* Make newly initialized descriptor visible to hardware */
--	wmb();
--	skb_tx_timestamp(skb);
--
--	macb_writel(bp, NCR, macb_readl(bp, NCR) | MACB_BIT(TSTART));
--
- 	if (CIRC_SPACE(queue->tx_head, queue->tx_tail, bp->tx_ring_size) < 1)
- 		netif_stop_subqueue(dev, queue_index);
- 
-+	skb_tx_timestamp(skb);
-+
-+	if (!skb->xmit_more || __netif_subqueue_stopped(dev, queue_index)) {
-+		/* Make newly initialized descriptor visible to hardware */
-+		wmb();
-+		macb_writel(bp, NCR, macb_readl(bp, NCR) | MACB_BIT(TSTART));
-+	}
-+
- unlock:
- 	spin_unlock_irqrestore(&bp->lock, flags);
- 
