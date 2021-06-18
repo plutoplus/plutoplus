@@ -25,6 +25,12 @@ The repo maintain the firmware of Pluto+. Pluto+ is a software-defined radio pla
 
 Pluto+ has full schematics open sourced. You can find this in sch folder.
 
+[Download Schematics](./sch/PLUTOX_SDR-V1.0-20201212.pdf)
+
+[Download Top View](./sch/Top.pdf)
+
+[Download Bottom View](./sch/Bottom.pdf)
+
 ## How to upgrade the firmware
 
 ### UDisk Upgrade
