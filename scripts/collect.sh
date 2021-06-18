@@ -1,5 +1,5 @@
 cd plutosdr-fw
-git diff > ../patches/fw.diff
+git diff --ignore-submodules > ../patches/fw.diff
 cd hdl
 git diff > ../../patches/hdl.diff
 cd ../linux
