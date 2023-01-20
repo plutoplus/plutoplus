@@ -50,9 +50,11 @@ If you device is not responding anymore, you have to apply DFU procedure to unbr
 4. Run DFU utility with the following command:
 
    ```
-   dfu-tool -a 0 -write boot.dfu
-   dfu-tool -a 1 -write pluto.dfu
+   dfu-util -a 0 -D boot.dfu
+   dfu-util -a 1 -D pluto.dfu -R
    ```
+
+The `-R` option is necessary to perform a USB Reset and make the device use the updated firmware. Depending on USB permissions given to your current user, you might need to prefix the commands with `sudo`.
 
 ## How to build firmware manually
 1. Clone this repo
