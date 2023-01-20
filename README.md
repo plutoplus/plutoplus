@@ -41,18 +41,20 @@ Pluto+ has full schematics open sourced. You can find this in sch folder.
 
 ### DFU Upgrade
 If you device is not responding anymore, you have to apply DFU procedure to unbrick it.
-1. Download the firmware and unzip it.
+1. Download the firmware and unzip it. You can get them [here](https://github.com/analogdevicesinc/plutosdr-fw/).
 
-2. Install dfu utility
+2. Install dfu utility. On Ubuntu/Debian it's `apt install dfu-util`.
 
 5. Make Device enter DFU mode. There is a howto section below on the details steps.
    
 4. Run DFU utility with the following command:
 
    ```
-   dfu-tool -a 0 -write boot.dfu
-   dfu-tool -a 1 -write pluto.dfu
+   dfu-util -a 0 -D boot.dfu
+   dfu-util -a 1 -D pluto.dfu -R
    ```
+
+The `-R` option is necessary to perform a USB Reset and make the device use the updated firmware. Depending on USB permissions given to your current user, you might need to prefix the commands with `sudo`.
 
 ## How to build firmware manually
 1. Clone this repo
