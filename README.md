@@ -41,7 +41,7 @@ Pluto+ has full schematics open sourced. You can find this in sch folder.
 
 ### DFU Upgrade
 If you device is not responding anymore, you have to apply DFU procedure to unbrick it.
-1. Download the firmware and unzip it.
+1. Download the firmware and unzip it. You can get them [here](https://github.com/analogdevicesinc/plutosdr-fw/).
 
 2. Install dfu utility
 
