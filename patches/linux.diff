@@ -1,5 +1,59 @@
+diff --git a/arch/arm/boot/dts/zynq-coraz7s.dtsi b/arch/arm/boot/dts/zynq-coraz7s.dtsi
+index b079648d2b07..7257bf30bfee 100644
+--- a/arch/arm/boot/dts/zynq-coraz7s.dtsi
++++ b/arch/arm/boot/dts/zynq-coraz7s.dtsi
+@@ -28,6 +28,14 @@ chosen {
+ 		stdout-path = "serial0:115200n8";
+ 	};
+ 
++	usb_phy0: phy0@e0002000 {
++		compatible = "ulpi-phy";
++		#phy-cells = <0>;
++		reg = <0xe0002000 0x1000>;
++		view-port = <0x0170>;
++		drv-vbus;
++	};
++
+ 	fpga_axi: fpga-axi@0 {
+ 		compatible = "simple-bus";
+ 		#address-cells = <0x1>;
+@@ -73,5 +81,6 @@ &uart0 {
+ &usb0 {
+ 	status = "okay";
+ 	dr_mode = "host";
++	usb-phy = <&usb_phy0>;
+ };
+ 
+diff --git a/arch/arm/boot/dts/zynq-m2k.dtsi b/arch/arm/boot/dts/zynq-m2k.dtsi
+index b82bf5a25641..e92c093501b9 100644
+--- a/arch/arm/boot/dts/zynq-m2k.dtsi
++++ b/arch/arm/boot/dts/zynq-m2k.dtsi
+@@ -19,6 +19,15 @@ memory {
+ 	chosen {
+ 		stdout-path = "/amba@0/uart@E0001000";
+ 	};
++
++	usb_phy0: phy0 {
++		compatible = "ulpi-phy";
++		#phy-cells = <0>;
++		reg = <0xe0002000 0x1000>;
++		view-port = <0x0170>;
++		drv-vbus;
++	};
++
+ };
+ 
+ &cpu0 {
+@@ -46,6 +55,7 @@ &usb0 {
+ 	xlnx,phy-reset-gpio = <&gpio0 52 0>;
+ 	dr_mode = "otg";
+ 	status = "okay";
++	usb-phy = <&usb_phy0>;
+ };
+ 
+ &clkc {
 diff --git a/arch/arm/boot/dts/zynq-pluto-sdr-revc.dts b/arch/arm/boot/dts/zynq-pluto-sdr-revc.dts
-index 7aff4e197d0f..5313336a30a4 100644
+index 9c9a0c9dbf9c..6971e9b645e5 100644
 --- a/arch/arm/boot/dts/zynq-pluto-sdr-revc.dts
 +++ b/arch/arm/boot/dts/zynq-pluto-sdr-revc.dts
 @@ -17,46 +17,6 @@
@@ -22,7 +76,7 @@ index 7aff4e197d0f..5313336a30a4 100644
 -};
 -
 -&amba {
--	axi_spi: axi_quad_spi@7C430000 {
+-	axi_spi: spi@7C430000 {
 -		#address-cells = <1>;
 -		#size-cells = <0>;
 -		bits-per-word = <8>;
@@ -49,7 +103,7 @@ index 7aff4e197d0f..5313336a30a4 100644
  &adc0_ad9364 {
  	/* This property is controlled by u-boot environment. */
  	adi,2rx-2tx-mode-enable;
-@@ -70,6 +30,11 @@
+@@ -70,6 +30,11 @@ &cf_ad9364_dac_core_0 {
  / {
  	model = "Analog Devices PlutoSDR Rev.C (Z7010/AD9363)";
  
@@ -61,7 +115,7 @@ index 7aff4e197d0f..5313336a30a4 100644
  	leds {
  		compatible = "gpio-leds";
  		led0 {
-@@ -92,3 +57,18 @@
+@@ -92,3 +57,18 @@ button {
  		};
  	};
  };
@@ -80,22 +134,31 @@ index 7aff4e197d0f..5313336a30a4 100644
 +    pinctrl-names = "default";
 +    pinctrl-0 = <&pinctrl_usb0_default>;
 +};
-\ No newline at end of file
 diff --git a/arch/arm/boot/dts/zynq-pluto-sdr.dtsi b/arch/arm/boot/dts/zynq-pluto-sdr.dtsi
-index e936f48dbd73..bad6c46056a5 100644
+index 08c5a42204f3..0fe5bba8a082 100644
 --- a/arch/arm/boot/dts/zynq-pluto-sdr.dtsi
 +++ b/arch/arm/boot/dts/zynq-pluto-sdr.dtsi
-@@ -40,8 +40,16 @@
+@@ -30,10 +30,26 @@ ad9364_clkin: clock@0 {
+ 		};
+ 	};
  
- };
- 
++	usb_phy0: phy0 {
++		compatible = "ulpi-phy";
++		#phy-cells = <0>;
++		reg = <0xe0002000 0x1000>;
++		view-port = <0x0170>;
++		drv-vbus;
++	};
++
++};
++
 +&uart1 {
 +	u-boot,dm-pre-reloc;
 +	status = "okay";
 +	pinctrl-names = "default";
 +	pinctrl-0 = <&pinctrl_uart1_default>;
-+};
-+
+ };
+ 
  &sdhci0 {
 -	status = "disabled";
 +	status = "okay";
@@ -103,7 +166,7 @@ index e936f48dbd73..bad6c46056a5 100644
  };
  
  &watchdog0 {
-@@ -50,12 +58,29 @@
+@@ -42,9 +58,24 @@ &watchdog0 {
  };
  
  &usb0 {
@@ -111,11 +174,9 @@ index e936f48dbd73..bad6c46056a5 100644
 +	xlnx,phy-reset-gpio = <&gpio0 46 0>;
  	dr_mode = "otg";
  	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb0_default>;
- 	usb-phy = <&usb_phy0>;
- };
- 
++	usb-phy = <&usb_phy0>;
++};
++
 +&gem0 {
 +	status = "ok";
 +	phy-mode = "rgmii-id";
@@ -128,13 +189,10 @@ index e936f48dbd73..bad6c46056a5 100644
 +		reg = <1>;
 +		device_type = "ethernet-phy";
 +	};
-+};
-+
-+
+ };
+ 
  &qspi {
- 	status = "okay";
- 	is-dual = <0>;
-@@ -98,6 +123,18 @@
+@@ -90,6 +121,18 @@ channel@0 {
  	};
  };
  
@@ -153,7 +211,7 @@ index e936f48dbd73..bad6c46056a5 100644
  / {
  	fpga_axi: fpga-axi@0 {
  		compatible = "simple-bus";
-@@ -187,6 +224,148 @@
+@@ -179,6 +222,148 @@ mwipcore@43c00000 {
  	};
  };
  
@@ -302,11 +360,90 @@ index e936f48dbd73..bad6c46056a5 100644
  &spi0 {
  	status = "okay";
  
+diff --git a/arch/arm/boot/dts/zynq-zc702.dts b/arch/arm/boot/dts/zynq-zc702.dts
+index c6b4593551c9..fb918a14fdc9 100644
+--- a/arch/arm/boot/dts/zynq-zc702.dts
++++ b/arch/arm/boot/dts/zynq-zc702.dts
+@@ -57,6 +57,14 @@ led-ds23 {
+ 			linux,default-trigger = "heartbeat";
+ 		};
+ 	};
++
++	usb_phy0: phy0@e0002000 {
++		compatible = "ulpi-phy";
++		#phy-cells = <0>;
++		reg = <0xe0002000 0x1000>;
++		view-port = <0x0170>;
++		drv-vbus;
++	};
+ };
+ 
+ &amba {
+@@ -454,6 +462,7 @@ &uart1 {
+ &usb0 {
+ 	status = "okay";
+ 	dr_mode = "host";
++	usb-phy = <&usb_phy0>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_usb0_default>;
+ };
+diff --git a/arch/arm/boot/dts/zynq-zc706.dts b/arch/arm/boot/dts/zynq-zc706.dts
+index 6a6e8312b3f7..cb6e9117f3a3 100644
+--- a/arch/arm/boot/dts/zynq-zc706.dts
++++ b/arch/arm/boot/dts/zynq-zc706.dts
+@@ -27,6 +27,14 @@ chosen {
+ 		bootargs = "";
+ 		stdout-path = "serial0:115200n8";
+ 	};
++
++	usb_phy0: phy0@e0002000 {
++		compatible = "ulpi-phy";
++		#phy-cells = <0>;
++		reg = <0xe0002000 0x1000>;
++		view-port = <0x0170>;
++		drv-vbus;
++	};
+ };
+ 
+ &clkc {
+@@ -352,6 +360,7 @@ &uart1 {
+ &usb0 {
+ 	status = "okay";
+ 	dr_mode = "host";
++	usb-phy = <&usb_phy0>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_usb0_default>;
+ };
+diff --git a/arch/arm/boot/dts/zynq-zed.dts b/arch/arm/boot/dts/zynq-zed.dts
+index 60f73cd2601b..2d531a6ea2ca 100644
+--- a/arch/arm/boot/dts/zynq-zed.dts
++++ b/arch/arm/boot/dts/zynq-zed.dts
+@@ -26,6 +26,14 @@ chosen {
+ 		bootargs = "";
+ 		stdout-path = "serial0:115200n8";
+ 	};
++
++	usb_phy0: phy0@e0002000 {
++		compatible = "ulpi-phy";
++		#phy-cells = <0>;
++		reg = <0xe0002000 0x1000>;
++		view-port = <0x0170>;
++		drv-vbus;
++	};
+ };
+ 
+ &clkc {
+@@ -93,4 +101,5 @@ &uart1 {
+ &usb0 {
+ 	status = "okay";
+ 	dr_mode = "host";
++	usb-phy = <&usb_phy0>;
+ };
 diff --git a/arch/arm/configs/zynq_pluto_defconfig b/arch/arm/configs/zynq_pluto_defconfig
-index ca72dd96a29d..01ed0ddd753d 100644
+index 1efe8ab24437..89365b48bb1f 100644
 --- a/arch/arm/configs/zynq_pluto_defconfig
 +++ b/arch/arm/configs/zynq_pluto_defconfig
-@@ -270,3 +270,15 @@ CONFIG_RCU_CPU_STALL_TIMEOUT=60
+@@ -268,3 +268,15 @@ CONFIG_RCU_CPU_STALL_TIMEOUT=60
  CONFIG_DEBUG_LL=y
  CONFIG_DEBUG_ZYNQ_UART1=y
  CONFIG_EARLY_PRINTK=y

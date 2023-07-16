@@ -1,5 +1,5 @@
 diff --git a/projects/pluto/system_bd.tcl b/projects/pluto/system_bd.tcl
-index 8a9634b9..85c1bc28 100644
+index fa47a8406..778adaf60 100644
 --- a/projects/pluto/system_bd.tcl
 +++ b/projects/pluto/system_bd.tcl
 @@ -47,6 +47,12 @@ ad_ip_parameter sys_ps7 CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ 100.0
@@ -47,7 +47,7 @@ index 8a9634b9..85c1bc28 100644
  ad_ip_parameter sys_ps7 CONFIG.PCW_IRQ_F2P_MODE REVERSE
  ad_ip_parameter sys_ps7 CONFIG.PCW_MIO_0_PULLUP {enabled}
 diff --git a/projects/pluto/system_constr.xdc b/projects/pluto/system_constr.xdc
-index 67a9558c..9bf4e924 100644
+index 67a9558cf..9bf4e924f 100644
 --- a/projects/pluto/system_constr.xdc
 +++ b/projects/pluto/system_constr.xdc
 @@ -1,69 +1,69 @@
@@ -386,15 +386,20 @@ index 67a9558c..9bf4e924 100644
  set_property SLEW FAST [get_ports *ddr_dqs*]
  set_property PACKAGE_PIN C2 [get_ports ddr_dqs_p[0]]
 diff --git a/projects/pluto/system_project.tcl b/projects/pluto/system_project.tcl
-index 89d81a44..fec220a1 100644
+index cdd0c17fc..61e975207 100644
 --- a/projects/pluto/system_project.tcl
 +++ b/projects/pluto/system_project.tcl
-@@ -3,7 +3,7 @@ source ../scripts/adi_env.tcl
+@@ -3,7 +3,7 @@ source ../../scripts/adi_env.tcl
  source $ad_hdl_dir/projects/scripts/adi_project_xilinx.tcl
  source $ad_hdl_dir/projects/scripts/adi_board.tcl
  
--set p_device "xc7z010clg225-1"
-+set p_device "xc7z010clg400-1"
- adi_project pluto
+-adi_project_create pluto 0 {} "xc7z010clg225-1"
++adi_project_create pluto 0 {} "xc7z010clg400-1"
  
  adi_project_files pluto [list \
+   "system_top.v" \
+@@ -13,4 +13,3 @@ adi_project_files pluto [list \
+ set_property is_enabled false [get_files  *system_sys_ps7_0.xdc]
+ adi_project_run pluto
+ source $ad_hdl_dir/library/axi_ad9361/axi_ad9361_delay.tcl
+-

@@ -53,7 +53,7 @@ index 0daf46221e..5991fa6cf7 100644
 +CONFIG_DM_ETH=y
 +CONFIG_ZYNQ_GEM=y
 diff --git a/include/configs/zynq-common.h b/include/configs/zynq-common.h
-index c0e9a47b2b..39967684bd 100644
+index fd50caf450..9765ca4a08 100644
 --- a/include/configs/zynq-common.h
 +++ b/include/configs/zynq-common.h
 @@ -257,7 +257,7 @@
