@@ -1,5 +1,5 @@
 diff --git a/arch/arm/dts/zynq-pluto-sdr.dts b/arch/arm/dts/zynq-pluto-sdr.dts
-index c618d98b54..c318383554 100644
+index c618d98b54..40a8cef054 100644
 --- a/arch/arm/dts/zynq-pluto-sdr.dts
 +++ b/arch/arm/dts/zynq-pluto-sdr.dts
 @@ -16,6 +16,7 @@
@@ -19,7 +19,6 @@ index c618d98b54..c318383554 100644
 +	u-boot,dm-pre-reloc;
 +	status = "okay";
 +};
-\ No newline at end of file
 diff --git a/configs/zynq_pluto_defconfig b/configs/zynq_pluto_defconfig
 index 0daf46221e..5991fa6cf7 100644
 --- a/configs/zynq_pluto_defconfig
