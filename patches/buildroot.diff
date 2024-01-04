@@ -39,10 +39,10 @@ index a3b3f6f664..55601033c6 100644
 -https://wiki.analog.com/university/tools/pluto
 +https://github.com/plutoplus/plutoplus
 diff --git a/configs/zynq_pluto_defconfig b/configs/zynq_pluto_defconfig
-index 7375c29a74..ff057b2955 100644
+index 6203766e04..884adfcd30 100644
 --- a/configs/zynq_pluto_defconfig
 +++ b/configs/zynq_pluto_defconfig
-@@ -32,6 +32,7 @@ BR2_PACKAGE_MTD=y
+@@ -29,6 +29,7 @@ BR2_PACKAGE_MTD=y
  # BR2_PACKAGE_MTD_UBIRSVOL is not set
  # BR2_PACKAGE_MTD_UBIUPDATEVOL is not set
  # BR2_PACKAGE_MTD_UBIBLOCK is not set
@@ -50,7 +50,7 @@ index 7375c29a74..ff057b2955 100644
  BR2_PACKAGE_LINUX_FIRMWARE=y
  BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61=y
  BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT73=y
-@@ -39,22 +40,37 @@ BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=y
+@@ -36,24 +37,39 @@ BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT2XX=y
  BR2_PACKAGE_LINUX_FIRMWARE_RTL_81XX=y
  BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX=y
  BR2_PACKAGE_LINUX_FIRMWARE_RTL_88XX=y
@@ -63,12 +63,14 @@ index 7375c29a74..ff057b2955 100644
 +BR2_PACKAGE_PHP=y
 +BR2_PACKAGE_PHP_EXT_SOCKETS=y
  BR2_PACKAGE_LIBAD9361_IIO=y
+ BR2_PACKAGE_LIBGPIOD=y
+ BR2_PACKAGE_LIBGPIOD_TOOLS=y
  BR2_PACKAGE_LIBIIO_IIOD_USBD=y
  BR2_PACKAGE_LIBIIO_TESTS=y
-+BR2_PACKAGE_LIBV4L=y
-+BR2_PACKAGE_LIBV4L_UTILS=y
++BR2_PACKAGE_LIBV4L=n
++BR2_PACKAGE_LIBV4L_UTILS=n
  BR2_PACKAGE_LIBINI=y
-+BR2_PACKAGE_X264=y
++BR2_PACKAGE_X264=n
 +BR2_PACKAGE_FFTW_SINGLE=y
 +BR2_PACKAGE_FFTW_FAST=y
 +BR2_PACKAGE_BC=y
@@ -85,24 +87,47 @@ index 7375c29a74..ff057b2955 100644
  BR2_PACKAGE_WPA_SUPPLICANT=y
  BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
  BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
-+BR2_PACKAGE_OPKG=y
-+BR2_PACKAGE_NANO=y
++BR2_PACKAGE_OPKG=n
++BR2_PACKAGE_NANO=n
  BR2_PACKAGE_POLL_SYSFS=y
  BR2_PACKAGE_AD936X_REF_CAL=y
  BR2_TARGET_ROOTFS_CPIO=y
-@@ -63,3 +79,15 @@ BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+@@ -62,3 +78,15 @@ BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
  BR2_PACKAGE_HOST_DOSFSTOOLS=y
  BR2_PACKAGE_HOST_GENIMAGE=y
  BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_FFMPEG_43=y
++BR2_PACKAGE_FFMPEG_43=n
 +BR2_PACKAGE_ALSA_UTILS=y
 +BR2_PACKAGE_ALSA_UTILS_APLAY=y
-+BR2_PACKAGE_FFMPEG=y
-+BR2_PACKAGE_FFMPEG_GPL=y
-+BR2_PACKAGE_FFMPEG_SWSCALE=y
++BR2_PACKAGE_FFMPEG=n
++BR2_PACKAGE_FFMPEG_GPL=n
++BR2_PACKAGE_FFMPEG_SWSCALE=n
 +BR2_PACKAGE_FFMPEG_ENCODERS="aac mpeg2video rawvideo libx264 dvbsub bmp png"
 +BR2_PACKAGE_FFMPEG_DECODERS="aac aac_latm mpeg2video mp2 yuv4 rawvideo mjpeg h264 mp3 pcm_s16le hevc flv srt"
 +BR2_PACKAGE_FFMPEG_MUXERS="adts flv mpegts rawvideo image2"
 +BR2_PACKAGE_FFMPEG_DEMUXERS="aac h264 mpegts mpegvideo pcm_s16le rawvideo rtp hevc flv dvbsub"
 +BR2_PACKAGE_FFMPEG_PARSERS="aac h264 mjpeg mpegaudio mpegvideo hevc"
 +#BR2_PACKAGE_STRACE=y
+diff --git a/package/ad936x_ref_cal/ad936x_ref_cal.hash b/package/ad936x_ref_cal/ad936x_ref_cal.hash
+index 24eb7fb88b..ca5798774c 100644
+--- a/package/ad936x_ref_cal/ad936x_ref_cal.hash
++++ b/package/ad936x_ref_cal/ad936x_ref_cal.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 26aedd8021fa939ab2f53e55904d869207265242fef7ad86aa4673e219b7cbef ad936x_ref_cal-01747db5cd60ff64115a73ac1f3bb97911f5c58e-br1.tar.gz
++sha256 4814915de63d975807e918df82bb86021d0e78839e8cc4116a36476d0b33180c ad936x_ref_cal-01747db5cd60ff64115a73ac1f3bb97911f5c58e-br1.tar.gz
+ 
+ # License files (locally computed as well)
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE
+diff --git a/package/libiio/libiio.hash b/package/libiio/libiio.hash
+index f1c58efb5e..cb6378f77b 100644
+--- a/package/libiio/libiio.hash
++++ b/package/libiio/libiio.hash
+@@ -1,6 +1,5 @@
+ # Locally calculated
+ sha256 a2b5d848531ea64fd9f95327dfd5a588bd227d9577281ec375e822702c6a52d5  libiio-0.24.tar.gz
+ sha256 21972599a3c143ab1f98002ad2b3f28f4aff927fde5f677478311cd4e517730c  libiio-0.25.tar.gz
+-sha256 e791ad1cf35aef08fc6e2b6b0dcdd1cc21d36cf287d81fa14adb088c6c1d4c49  libiio-38483f31be391af66b35542f733e569febe13d3a-br1.tar.gz
++sha256 865fe496624bebc7c4266bf157fb4b5ec851b5f929d2571ec73846e4f317cf46  libiio-38483f31be391af66b35542f733e569febe13d3a-br1.tar.gz
+ sha256 102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b  COPYING.txt
+-
