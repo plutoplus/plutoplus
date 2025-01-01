@@ -63,15 +63,15 @@ If you device is not responding anymore, you have to apply DFU procedure to unbr
    git apply ../patches/fw.diff
    
    cd hdl
-   git apply ../../hdl.diff
+   git apply ../../patches/hdl.diff
    cd ..
    
    cd linux
-   git apply ../../linux.diff
+   git apply ../../patches/linux.diff
    cd ..
    
    cd u-boot-xlnx
-   git apply ../../u-boot-xlnx.diff
+   git apply ../../patches/u-boot-xlnx.diff
    cd ..
    
    ```
