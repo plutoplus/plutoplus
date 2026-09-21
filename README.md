@@ -1,3 +1,13 @@
+# ⚠️ Buyer Beware — Fake PlutoPlus Clones
+
+There are counterfeit/cloned versions of the PlutoPlus being sold on the market, and the build quality of some of these clones is extremely poor. If you're looking to buy one, make sure you know what you're getting and carefully verify the seller and product before placing an order.
+
+Hamgeek is a site that has been reported by numerous users for selling counterfeit/cloned products. There are many complaints from buyers who received poor-quality fake units that did not meet the expected quality of the genuine product.
+
+Do your homework before buying. Don’t get fooled by a cheaper price. Make sure you’re buying a genuine PlutoPlus from a reputable source.
+![Clone](./images/22.png)
+![Clone](./images/hangeek.png)
+
 # Pluto+
 The repo maintain the firmware of Pluto+. Pluto+ is a software-defined radio platform that supports 2TX 2RX, supports Gigabit Ethernet and Micro SD card. The design inherited from the well-known ADI ADALM-PLUTO with several improvements.
 
