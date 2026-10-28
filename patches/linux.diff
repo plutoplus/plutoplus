@@ -322,3 +322,99 @@ index ca72dd96a29d..01ed0ddd753d 100644
 +CONFIG_MMC_SDHCI=y
 +CONFIG_MMC_SDHCI_PLTFM=y
 +CONFIG_MMC_SDHCI_OF_ARASAN=y
+diff --git a/drivers/mtd/spi-nor/spi-nor.c b/drivers/mtd/spi-nor/spi-nor.c
+--- a/drivers/mtd/spi-nor/spi-nor.c
++++ b/drivers/mtd/spi-nor/spi-nor.c
+@@ -686,6 +686,23 @@
+ 	return nor->write_reg(nor, SPINOR_OP_BRWR, nor->bouncebuf, 1);
+ }
+ 
++static int spi_nor_write_ear_raw(struct spi_nor *nor, u8 ear)
++{
++	nor->bouncebuf[0] = ear;
++
++	if (nor->spimem) {
++		struct spi_mem_op op =
++			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_WREAR, 1),
++				   SPI_MEM_OP_NO_ADDR,
++				   SPI_MEM_OP_NO_DUMMY,
++				   SPI_MEM_OP_DATA_OUT(1, nor->bouncebuf, 1));
++
++		return spi_mem_exec_op(nor->spimem, &op);
++	}
++
++	return nor->write_reg(nor, SPINOR_OP_WREAR, nor->bouncebuf, 1);
++}
++
+ static int spi_nor_write_ear(struct spi_nor *nor, u32 ear)
+ {
+ 	u8 code = SPINOR_OP_WREAR;
+@@ -710,8 +727,11 @@
+ 		code = SPINOR_OP_BRWR;
+ 	if (nor->jedec_id == CFI_MFR_ST ||
+ 	    nor->jedec_id == CFI_MFR_MACRONIX ||
+-	    nor->jedec_id == SNOR_MFR_ISSI) {
+-		write_enable(nor);
++	    nor->jedec_id == SNOR_MFR_ISSI ||
++	    nor->jedec_id == SNOR_MFR_WINBOND) {
++		ret = write_enable(nor);
++		if (ret)
++			return ret;
+ 		code = SPINOR_OP_WREAR;
+ 	}
+ 	nor->bouncebuf[0] = addr;
+@@ -727,7 +747,8 @@
+ 	} else {
+ 		ret =  nor->write_reg(nor, code, nor->bouncebuf, 1);
+ 	}
+-	nor->curbank = addr;
++	/* The bank is unknown after an error; force the next selection. */
++	nor->curbank = ret ? 0xff : addr;
+ 
+ 	return ret;
+ }
+@@ -745,8 +766,11 @@
+ 	 * Register to be set to 1, so all 3-byte-address reads come from the
+ 	 * second 16M. We must clear the register to enable normal behavior.
+ 	 */
+-	write_enable(nor);
+-	ret = spi_nor_write_ear(nor, 0);
++	ret = write_enable(nor);
++	if (ret)
++		return ret;
++	/* Clear EAR even when the cached bank is already zero. */
++	ret = spi_nor_write_ear_raw(nor, 0);
+ 	write_disable(nor);
+ 
+ 	return ret;
+@@ -787,7 +811,8 @@
+ 	/* This is actually Micron */
+ 	else if (JEDEC_MFR(info) == CFI_MFR_ST ||
+ 		 JEDEC_MFR(info) == CFI_MFR_MACRONIX ||
+-		 JEDEC_MFR(info) == SNOR_MFR_ISSI)
++		 JEDEC_MFR(info) == SNOR_MFR_ISSI ||
++		 JEDEC_MFR(info) == SNOR_MFR_WINBOND)
+ 		code = SPINOR_OP_RDEAR;
+ 	else
+ 		return -EINVAL;
+@@ -5358,12 +5383,15 @@
+ 			int status;
+ 
+ 			nor->addr_width = 3;
+-			nor->params.set_4byte(nor, false);
++			status = nor->params.set_4byte(nor, false);
++			if (status)
++				return status;
+ 			status = read_ear(nor, (struct flash_info *)nor->info);
+-			if (status < 0)
+-				dev_warn(nor->dev, "failed to read ear reg\n");
+-			else
+-				nor->curbank = status & EAR_SEGMENT_MASK;
++			if (status < 0) {
++				dev_err(nor->dev, "failed to read ear reg\n");
++				return status;
++			}
++			nor->curbank = status & EAR_SEGMENT_MASK;
+ 		} else {
+ #endif
+ 			/*
